@@ -1,2 +1,2 @@
-runtime: nodejs20
-service: "smitabc"
+runtime: nodejs18
+service: "products-api"

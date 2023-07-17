@@ -1,11 +1,35 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Document</title>
-</head>
-<body>
-	front end
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    front end
+
+    <form id="addProductForm">
+      <input type="text" name="" id="productName" placeholder="Product Name" />
+      <input type="text" name="" id="price" placeholder="Price" />
+      <input type="text" name="" id="description" placeholder="Description" />
+      <button>Submit</button>
+    </form>
+
+    <div id="data"></div>
+
+    <script type="module">
+      const productName = document.querySelector("#productName");
+      const price = document.querySelector("#price");
+      const description = document.querySelector("#description");
+
+      document
+        .querySelector("#addProductForm")
+        .addEventListener("submit", (e) => {
+          e.preventDefault();
+          console.log("productName", productName.value);
+          console.log("price", price.value);
+          console.log("description", description.value);
+        });
+    </script>
+  </body>
 </html>
