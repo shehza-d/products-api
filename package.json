@@ -1,0 +1,32 @@
+{
+  "name": "products-api",
+  "version": "1.0.0",
+  "description": "documented api",
+  "main": "server.mjs",
+  "scripts": {
+    "start": "node server.mjs",
+    "dev": "nodemon server.mjs"
+  },
+  "engines": {
+    "node": "18.x.x"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shehza-d/products-api.git"
+  },
+  "keywords": [
+    "api"
+  ],
+  "author": "shehzad",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  },
+  "bugs": {
+    "url": "https://github.com/shehza-d/products-api/issues"
+  },
+  "homepage": "https://github.com/shehza-d/products-api#readme"
+}
