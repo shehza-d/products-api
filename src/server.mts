@@ -4,9 +4,6 @@ import { productRouter } from "./routes/product.mjs";
 import { PORT } from "./config/index.mjs";
 import type { Express } from "express";
 
-// import { customAlphabet } from "nanoid";
-// const nanoid = customAlphabet("1234567890", 20);
-
 const __dirname = path.resolve();
 const app: Express = express();
 

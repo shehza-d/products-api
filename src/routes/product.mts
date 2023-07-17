@@ -12,15 +12,14 @@ const router = express.Router();
 //   }
 
 router.get("/products", async (req, res) => {
-  console.log("this is signup!", req.params);
-
   try {
     const products = db.collection<IProduct>("products");
-    const data = products.find({});
-    // if(!data)console.log('not found');
-    console.log("data:::", data);
+    const data = await products.find<IProduct>({}).toArray();
+
+    if (!data.length) res.status(404).send({ message: "Products Not Found" });
+
     res.status(200).send({
-      message: "all products",
+      message: "all products2",
       data,
     });
   } catch (err) {
@@ -67,12 +66,10 @@ router.post("/product", async (req, res) => {
 	  
 	  missing. example JSON request body:`);
   }
-  console.log("body", req.body);
   try {
     const products = db.collection<IProduct>("products");
 
     const data = await products.insertOne({
-      id: req.body.id,
       name: req.body.name,
       price: req.body.price,
       description: req.body.description,
@@ -104,7 +101,6 @@ router.put("/product/:id", async (req, res) => {
     const products = db.collection<IProduct>("products");
 
     const data = await products.insertOne({
-      id: req.body.id,
       name: req.body.name,
       price: req.body.price,
       description: req.body.description,
@@ -129,7 +125,6 @@ router.delete("/product/:id", async (req, res) => {
     const products = db.collection<IProduct>("products");
 
     const data = await products.insertOne({
-      id: req.body.id,
       name: req.body.name,
       price: req.body.price,
       description: req.body.description,
