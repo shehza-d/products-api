@@ -1,110 +1,132 @@
 import { IProduct } from "../types/index.js";
 import express from "express";
 import { db } from "../db/index.mjs";
+import { ObjectId } from "mongodb";
 
 const router = express.Router();
 
-//   {
-//     id: nanoid(), // always a number
-//     name: "abc product",
-//     price: "$23.12",
-//     description: "abc product description",
-//   }
+const parameterMissing = {
+  message: `Required parameter missing. At-least one parameter is required from name, price or description to complete update.`,
+  exampleRequest: {
+    id: "64b661974646eede5776adc6",
+    name: "Samsung",
+    price: 500,
+    description:
+      "Lorem Ipsum is simply dummy book. It has survived not only five centuries, software like Lorem Ipsum.",
+  },
+};
 
 router.get("/products", async (req, res) => {
   try {
     const products = db.collection<IProduct>("products");
     const data = await products.find<IProduct>({}).toArray();
 
-    if (!data.length) res.status(404).send({ message: "Products Not Found" });
+    if (!data.length) {
+      res.status(404).send({ message: "Products Not Found" });
+      return;
+    }
 
-    res.status(200).send({
-      message: "all products2",
-      data,
-    });
-  } catch (err) {
-    res.status(500).send({ message: "error" });
-    console.log("🚀 ~ file: db.ts:16 ~ err:", err);
+    res.status(200).send({ message: "all products2", data });
+  } catch (err: any) {
+    res.status(500).send({ message: err.message || "Unknown Error" });
+    console.log("🚀 ~ file: product.mts ~ router ~ err:", err);
   }
 });
 
 router.get("/product/:id", async (req, res) => {
-  const id = req.params.id;
-  console.log("typeof", typeof id);
-
-  //   if (isNaN(id)) {
-  //     res.status(403).send("invalid product id");
-  //   }
-
-  //   if (isFound) {
-  //     res.status(404);
-  //     res.send({
-  //       message: "product not found",
-  //     });
+  const { id } = req.params;
+  console.log("id::  ", id);
 
   try {
-    // const query = { _id: id };
-    const products = db.collection<IProduct>("products");
+    const query = { _id: new ObjectId(id) };
 
-    const data = await products.findOne({});
-    // if (!data.length) console.log("no data");
+    const products = db.collection<IProduct>("products");
+    const data = await products.findOne<IProduct>(query);
+
     console.log("🚀 ~ file: product.mjs:52 ~ data:", data);
-    res.send({
-      message: "product found with id: ",
-      data,
-    });
-  } catch (err) {
-    res.status(500).send({ message: "error" });
+    if (!data) throw Error("Product Not Found!");
+
+    res.send({ message: "Product found", data });
+  } catch (err: any) {
+    res.status(500).send({ message: err.message || "Unknown Error" });
     console.log("🚀 ~ file: db.ts:16 ~ err:", err);
   }
 });
+
+// router.get("/product", async (req, res) =>
+//   res.status(402).send({ message: "Product id missing" })
+// );
 
 router.post("/product", async (req, res) => {
-  if (!req.body.name || !req.body.price || !req.body.description) {
-    res.status(403).send(`
-	  required parameter 
-	  
-	  missing. example JSON request body:`);
+  const { name, description } = req.body;
+  const price = Number(req.body.price);
+
+  // Validation
+  if (
+    !name ||
+    !price ||
+    !description ||
+    isNaN(price) ||
+    typeof name !== "string" ||
+    typeof description !== "string"
+  ) {
+    res.status(403).send(parameterMissing);
+    return;
   }
+
   try {
     const products = db.collection<IProduct>("products");
+    const data = await products.insertOne({ name, price, description });
 
-    const data = await products.insertOne({
-      name: req.body.name,
-      price: req.body.price,
-      description: req.body.description,
-    });
-
-    console.log("db data 2", data);
-    // if (!data.length) console.log("no data");
-    res.status(201).send({ message: "created product" });
-  } catch (err) {
-    res.send({ message: "error" });
-    console.log("🚀 ~ file: db.ts:16 ~ err:", err);
+    if (data.acknowledged)
+      res.status(201).send({
+        message: "New Product Created!",
+        id: data.insertedId.toString(),
+      });
+  } catch (err: any) {
+    res.status(500).send({ message: err.message || "Unknown Error" });
+    console.log("🚀 ~ file: product.mts ~ router ~ err:", err);
   }
 });
 
-router.put("/product/:id", async (req, res) => {
-  if (!req.body.name && !req.body.price && !req.body.description) {
-    res.status(403).send(`
-		required parameter missing. 
-		at-least one parameter is required: name, price or description to complete update
-		example JSON request body:
-		{
-		  name: "abc product",
-		  price: "$23.12",
-		  description: "abc product description"
-		}`);
+router.put("/product", async (req, res) => {
+  const { id, name, description } = req.body;
+  const price = Number(req.body.price);
+
+  // Validation
+  // inma agar sab missing hongye tw true return hoga aur koi ak bhi available hua tw false return hoga
+  if ((!name && !price && !description) || !id) {
+    res.status(403).send(parameterMissing);
+    return;
   }
+
+  if (price && isNaN(price)) {
+    res.status(403).send("Price missing");
+    return;
+  }
+  if (name && typeof name !== "string") {
+    res.status(403).send("NAME  missing");
+    return;
+  }
+  if (description && typeof description !== "string") {
+    res.status(403).send("description missing");
+    return;
+  }
+
+  // res.status(201).send({ message: "Validation pass" });
+  // return;
 
   try {
     const products = db.collection<IProduct>("products");
 
-    const data = await products.insertOne({
-      name: req.body.name,
-      price: req.body.price,
-      description: req.body.description,
-    });
+    // create a filter for a movie to update
+    const filter = { name: "collestion testing" };
+    // this option instructs the method to create a document if no documents match the filter
+    // const options = { upsert: true };
+    // create a document that sets the plot of the movie
+    const updateDoc = { $set: { name, price, description } };
+
+    const data = await products.updateOne(filter, updateDoc);
 
     // if (isFound) {
     //   res.status(404).send({
@@ -113,34 +135,38 @@ router.put("/product/:id", async (req, res) => {
     // }
 
     console.log("db data 2", data);
-    res.status(201).send({ message: "created product" });
-  } catch (err) {
-    res.status(500).send({ message: "error" });
-    console.log("🚀 ~ file: db.ts:16 ~ err:", err);
+    res.status(201).send({ message: "Product update" });
+  } catch (err: any) {
+    res.status(500).send({ message: err.message || "Unknown Error" });
+    console.log("🚀 ~ file: product.mts ~ router ~ err:", err);
   }
 });
 
 router.delete("/product/:id", async (req, res) => {
   try {
     const products = db.collection<IProduct>("products");
+    // const query =  { _id : `ObjectId("563237a41a4d68582c2509da")` }
+    const query = { _id: { $oid: "563237a41a4d68582c2509da" } };
+    // const query = { price: "req.body.price",};
 
-    const data = await products.insertOne({
-      name: req.body.name,
-      price: req.body.price,
-      description: req.body.description,
-    });
+    const result = await products.deleteOne(query);
 
     // if (isFound) {
     //   res.status(404).send({
     //     message: "product not found",
     //   });
     // }
+    if (result.deletedCount === 1) {
+      console.log("Successfully deleted one document.");
+    } else {
+      throw new Error("No documents matched the query. Deleted 0 documents.");
+    }
 
-    console.log("db data 2", data);
+    console.log("db data 2", result);
     res.status(201).send({ message: "deleted product" });
-  } catch (err) {
-    res.status(500).send({ message: "error" });
-    console.log("🚀 ~ file: db.ts:16 ~ err:", err);
+  } catch (err: any) {
+    res.status(500).send({ message: err.message || "Unknown Error" });
+    console.log("🚀 ~ file: product.mts ~ router ~ err:", err);
   }
 });
 
