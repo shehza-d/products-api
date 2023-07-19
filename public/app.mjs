@@ -1,11 +1,10 @@
 const baseUrl = `http://localhost:3003`;
+// const baseUrl = `https://products-api-dot-learning-chatbot-393109.lm.r.appspot.com/`;
 const productName = document.querySelector("#productName");
 const price = document.querySelector("#price");
 const description = document.querySelector("#description");
 const dataDiv = document.querySelector("#data");
 const form = document.querySelector("#addProductForm");
-
-// notyf.success("data.message");
 
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
@@ -24,12 +23,12 @@ form.addEventListener("submit", async (e) => {
 });
 
 const getProductData = async () => {
+  dataDiv.innerHTML += "";
   try {
     const {
       data: { data },
     } = await axios.get(`${baseUrl}/api/v1/products`);
 
-    console.log("🚀 getProductData ~ data:", data);
     if (!data.length) throw Error("No Data Found");
 
     data.map((item, i) => {
@@ -50,11 +49,11 @@ const getProductData = async () => {
     });
   } catch (err) {
     notyf.error(err.response.data.message);
-    console.log("🚀 ~ file: index.html:84 ~ getProductData ~ err:", err);
   }
 };
 getProductData();
 
+// https://github.com/caroso1222/notyf
 const notyf = new Notyf({
   duration: 4000,
   position: {
