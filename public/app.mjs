@@ -40,18 +40,31 @@ const getProductData = async () => {
   <p class="text-justify font-light">
     ${item.description}
   </p>
-  <span
+  <button
+	id="deleteBtn"
 	class="absolute top-4 right-6 bg-blue-400 rounded-full h-7 flex justify-center items-center w-7"
+	>X
+  </button>
+  <span
+	class="absolute top-4 right-15 bg-blue-400 rounded-full h-7 flex justify-center items-center w-7"
 	>${i + 1}
   </span>
-</div>
-  `;
+</div>`;
     });
   } catch (err) {
     notyf.error(err.response.data.message);
   }
 };
 getProductData();
+
+const deleteProduct = async (id) => {
+  try {
+    const data = await axios.delete(`${baseUrl}/api/v1/product/${id}`);
+    getProductData();
+  } catch (err) {
+    notyf.error(err.response.data.message);
+  }
+};
 
 // https://github.com/caroso1222/notyf
 const notyf = new Notyf({
