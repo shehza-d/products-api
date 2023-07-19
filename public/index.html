@@ -3,33 +3,82 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.tailwindcss.com"></script>
     <title>Document</title>
   </head>
-  <body>
-    front end
+  <body class="container mx-auto px-4 sm:px-8">
+    <h2 class="text-3xl text-center font-bold my-6">Add Product</h2>
 
-    <form id="addProductForm">
-      <input type="text" name="" id="productName" placeholder="Product Name" />
-      <input type="text" name="" id="price" placeholder="Price" />
-      <input type="text" name="" id="description" placeholder="Description" />
-      <button>Submit</button>
+    <form class="flex gap-6 flex-col" id="addProductForm">
+      <div>
+        <label class="block mb-2 text-sm font-medium text-gray-900"
+          >Product Name</label
+        >
+        <input
+          type="text"
+          id="productName"
+          class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+          placeholder="Product Name"
+        />
+      </div>
+
+      <div>
+        <label class="block mb-2 text-sm font-medium text-gray-900"
+          >Price</label
+        >
+        <input
+          type="text"
+          id="price"
+          class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+          placeholder="Price"
+        />
+      </div>
+
+      <div>
+        <label class="block mb-2 text-sm font-medium text-gray-900"
+          >Description</label
+        >
+        <input
+          type="text"
+          class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+          id="description"
+          placeholder="Description"
+        />
+      </div>
+
+      <button
+        type="submit"
+        class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center"
+      >
+        Submit
+      </button>
     </form>
 
-    <div id="data"></div>
+    <!--  -->
+    <h2 class="text-3xl text-center font-bold my-6">Products</h2>
+    <div class="flex gap-6 flex-col" id="data">
+      <!-- <div class="border relative p-4 rounded-lg border-slate-700">
+        <h3 class="text-2xl font-semibold capitalize">Samsung</h3>
+        <h5 class="text-xl">$5849.54</h5>
+        <p class="text-justify font-light">
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Nostrum rerum
+          reprehenderit molestiae odit dolor! Consequatur quasi voluptates
+          minus, soluta odio omnis mollitia molestias ex dolorum quaerat. Eos
+          nulla incidunt doloribus!
+        </p>
+        <span
+          class="absolute top-4 right-6 bg-blue-400 rounded-full h-7 flex justify-center items-center w-7"
+          >1
+        </span>
+      </div> -->
+    </div>
 
-    <script type="module">
-      const productName = document.querySelector("#productName");
-      const price = document.querySelector("#price");
-      const description = document.querySelector("#description");
-
-      document
-        .querySelector("#addProductForm")
-        .addEventListener("submit", (e) => {
-          e.preventDefault();
-          console.log("productName", productName.value);
-          console.log("price", price.value);
-          console.log("description", description.value);
-        });
-    </script>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.css"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script type="module" src="./app.mjs"></script>
   </body>
 </html>
