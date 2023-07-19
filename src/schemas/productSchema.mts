@@ -11,4 +11,4 @@
 //     createdDate: { type: Date, default: Date.now },
 //   })
 // );
-export {}
+export {};

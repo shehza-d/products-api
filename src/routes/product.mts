@@ -15,6 +15,7 @@ const parameterMissing = {
       "Lorem Ipsum is simply dummy book. It has survived not only five centuries, software like Lorem Ipsum.",
   },
 };
+
 router.get("/products", async (req, res) => {
   try {
     const products = db.collection<IProduct>("products");
@@ -38,35 +39,35 @@ router.get("/product/:id", async (req, res) => {
     try {
       const products = db.collection<IProduct>("products");
       const data = await products.find<IProduct>({}).toArray();
-  
+
       if (!data.length) {
         res.status(404).send({ message: "Products Not Found" });
         return;
       }
-  
+
       res.status(200).send({ message: "All Products fetched", data });
     } catch (err: any) {
       res.status(500).send({ message: err.message || "Unknown Error" });
     }
   });
-  
+
   router.get("/product/:id", async (req, res) => {
     const { id } = req.params;
-  
+
     try {
       const query = { _id: new ObjectId(id) };
-  
+
       const products = db.collection<IProduct>("products");
       const data = await products.findOne<IProduct>(query);
-  
+
       if (!data) throw Error("Product Not Found!");
-  
+
       res.send({ message: "Product found", data });
     } catch (err: any) {
       res.status(500).send({ message: err.message || "Unknown Error" });
     }
   });
-  
+
   try {
     const query = { _id: new ObjectId(id) };
 
@@ -80,7 +81,6 @@ router.get("/product/:id", async (req, res) => {
     res.status(500).send({ message: err.message || "Unknown Error" });
   }
 });
-
 
 router.post("/product", async (req, res) => {
   const { name, description } = req.body;
