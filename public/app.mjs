@@ -1,5 +1,7 @@
-const baseUrl = `http://localhost:3003`;
-// const baseUrl = `https://products-api-dot-learning-chatbot-393109.lm.r.appspot.com/`;
+const baseUrl = window.location.href.includes("localhost")
+  ? `http://localhost:3003`
+  : ``;
+
 const productName = document.querySelector("#productName");
 const price = document.querySelector("#price");
 const description = document.querySelector("#description");
@@ -46,7 +48,7 @@ const getProductData = async () => {
 	>X
   </button>
   <span
-	class="absolute top-4 right-15 bg-blue-400 rounded-full h-7 flex justify-center items-center w-7"
+	class="absolute top-4 right-16 bg-blue-400 rounded-full h-7 flex justify-center items-center w-7"
 	>${i + 1}
   </span>
 </div>`;
