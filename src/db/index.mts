@@ -12,6 +12,8 @@ try {
 
 export { db };
 
+// "dev": "concurrently \"npx tsc --watch\" \"nodemon -q dist/server.mjs\"",
+
 // finally {
 //   // Ensures that the client will close when you finish/error
 //   await client.close(); }
