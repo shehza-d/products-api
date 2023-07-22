@@ -1,6 +1,6 @@
 import express from "express";
 import path from "path";
-import { productRouter } from "./routes/product.mjs";
+import { productRouter } from "./routes/productRoutes.mjs";
 import { PORT } from "./config/index.mjs";
 import type { Express } from "express";
 
