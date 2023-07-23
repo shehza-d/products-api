@@ -67,7 +67,6 @@ export const addProduct = async (req: Request, res: Response) => {
   }
 };
 
-//
 export const updateProduct = async (req: Request, res: Response) => {
   const { id, name, description } = req.body;
   const price = Number(req.body.price);
