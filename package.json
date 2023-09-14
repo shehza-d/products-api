@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "start": "node dist/server.mjs",
-    "dev": "npx tsc --watch & nodemon -q dist/server.mjs",
+    "dev": "concurrently \"npx tsc --watch\" \"nodemon -q dist/server.mjs\"",
     "build": "tsc",
     "deploy": "gcloud app deploy"
   },

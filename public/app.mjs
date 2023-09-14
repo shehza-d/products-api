@@ -43,7 +43,7 @@ const getProductData = async () => {
     ${item.description}
   </p>
   <button
-	id="deleteBtn"
+	onclick="${deleteProduct(item._id)}"
 	class="absolute top-4 right-6 bg-blue-400 rounded-full h-7 flex justify-center items-center w-7"
 	>X
   </button>
@@ -59,7 +59,8 @@ const getProductData = async () => {
 };
 getProductData();
 
-const deleteProduct = async (id) => {
+window.deleteProduct = async (id) => {
+  console.log("tsting");
   try {
     const data = await axios.delete(`${baseUrl}/api/v1/product/${id}`);
     getProductData();

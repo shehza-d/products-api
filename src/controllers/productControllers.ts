@@ -4,6 +4,7 @@ import type { Request, Response } from "express";
 import { ObjectId } from "mongodb";
 
 export const getAllProducts = async (req: Request, res: Response) => {
+  console.log("🚀 ~ file: productControllers.ts:7 ~ getAllProducts ~ req:", req)
   try {
     const products = db.collection<IProduct>("products");
     const data = await products.find<IProduct>({}).toArray();
@@ -21,6 +22,11 @@ export const getAllProducts = async (req: Request, res: Response) => {
 
 export const getProduct = async (req: Request, res: Response) => {
   const { id } = req.params;
+
+  if (!ObjectId.isValid(id)) {
+    res.status(403).send({ message: "Incorrect product id" });
+    return;
+  }
 
   try {
     const query = { _id: new ObjectId(id) };
@@ -72,6 +78,10 @@ export const updateProduct = async (req: Request, res: Response) => {
   const price = Number(req.body.price);
 
   // Validation
+  if (!ObjectId.isValid(id)) {
+    res.status(403).send({ message: "Incorrect product id" });
+    return;
+  }
   if ((!name && !price && !description) || !id) {
     res.status(403).send(parameterMissing);
     return;
@@ -90,10 +100,16 @@ export const updateProduct = async (req: Request, res: Response) => {
     return;
   }
 
+  let product: Partial<IProduct> = {};
+
+  name && (product.name = name);
+  price && (product.price = price);
+  description && (product.description = description);
+
   try {
-    const filter = { _id: new ObjectId(id) };
-    const updateDoc = { $set: { name, price, description } };
     const products = db.collection<IProduct>("products");
+    const filter = { _id: new ObjectId(id) };
+    const updateDoc = { $set: product };
     const data = await products.updateOne(filter, updateDoc);
 
     if (!data.matchedCount) throw Error("Product Not Found!");
@@ -107,6 +123,10 @@ export const updateProduct = async (req: Request, res: Response) => {
 export const deleteProduct = async (req: Request, res: Response) => {
   const { id } = req.params;
 
+  if (!ObjectId.isValid(id)) {
+    res.status(403).send({ message: "Incorrect product id" });
+    return;
+  }
   try {
     const products = db.collection<IProduct>("products");
     const query = { _id: new ObjectId(id) };
